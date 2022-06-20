@@ -2,14 +2,7 @@ import React, { useEffect } from "react";
 import Character from "../../models/Character";
 import Item from "../commons";
 
-import {
-	View,
-	Text,
-	TextInput,
-	Button,
-	FlatList,
-	StyleSheet,
-} from "react-native";
+import { View, Text, TextInput, FlatList, StyleSheet } from "react-native";
 
 interface ObjectFlatList {
 	id: string;

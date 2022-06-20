@@ -26,6 +26,8 @@ const Item = ({ item, onPress }: PropsItem) => {
 
 const styles = StyleSheet.create({
 	item: {
+		borderRadius: 1,
+		borderColor: blue,
 		padding: 20,
 		marginVertical: 8,
 		marginHorizontal: 16,
