@@ -5,7 +5,7 @@ import {
 	StyleSheet,
 	GestureResponderEvent,
 } from "react-native";
-
+import { Avatar, Card, IconButton } from "react-native-paper";
 interface ObjectFlatList {
 	id: string;
 	title: string;
@@ -19,7 +19,14 @@ interface PropsItem {
 const Item = ({ item, onPress }: PropsItem) => {
 	return (
 		<TouchableOpacity onPress={onPress} style={[styles.item]}>
-			<Text style={[styles.title]}>{item.title}</Text>
+			<Card.Title
+				title={item.title}
+				style={styles.title}
+				subtitle="Card Subtitle"
+				left={(props) => <Avatar.Icon {...props} icon="folder" />}
+				right={(props) => <IconButton {...props} icon="folder" />}
+			/>
+			<Text style={styles.title}>{item.title}</Text>
 		</TouchableOpacity>
 	);
 };
@@ -27,7 +34,8 @@ const Item = ({ item, onPress }: PropsItem) => {
 const styles = StyleSheet.create({
 	item: {
 		borderRadius: 1,
-		borderColor: blue,
+		borderColor: "blue",
+		borderWidth: 3,
 		padding: 20,
 		marginVertical: 8,
 		marginHorizontal: 16,
