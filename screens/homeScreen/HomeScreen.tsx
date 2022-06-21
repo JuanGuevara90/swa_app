@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Character from "../../models/Character";
-import Item from "../../components/commons";
-
+import { getCharacters } from "../../utilities/getCharacters";
 import {
 	View,
 	Text,
@@ -18,25 +17,25 @@ interface ObjectFlatList {
 
 function HomeScreen({ navigation }) {
 	const [text, onChangeText] = React.useState("");
-	const [characters, setCharacters] = React.useState<Character[]>();
+	const [characters, setCharacters] = React.useState<
+		Character[] | Promise<Character[]>
+	>();
 	const [searchCharacters, setSearchCharacters] =
 		React.useState<ObjectFlatList[]>();
 
 	useEffect(() => {
-		const getCharacters = async () => {
-			let response = await fetch("https://swapi.dev/api/people");
-			let values = await response.json();
-			let arrayCharacters = values.results;
+		let arrayCharacters = getCharacters("/character");
+		console.log(arrayCharacters);
+		if (arrayCharacters) {
 			setCharacters(arrayCharacters);
-			let formatArray = arrayCharacters.map(
-				(character: Character, item: number) => {
-					return { id: item, title: character.name };
-				}
-			);
-			setSearchCharacters(formatArray);
-		};
-		getCharacters();
-		return;
+		}
+
+		let formatArray = arrayCharacters.map(
+			(character: Character, item: number) => {
+				return { id: item, title: character.name };
+			}
+		);
+		setSearchCharacters(formatArray);
 	}, []);
 
 	useEffect(() => {
@@ -52,13 +51,18 @@ function HomeScreen({ navigation }) {
 					setSearchCharacters([]);
 				}
 				setSearchCharacters(newArrayCharacters);
-				return;
+			} else {
+				let formatArray = characters.map(
+					(character: Character, item: number) => {
+						return { id: String(item), title: character.name };
+					}
+				);
+				setSearchCharacters(formatArray);
 			}
-			let formatArray = characters.map((character: Character, item: number) => {
-				return { id: String(item), title: character.name };
-			});
-			setSearchCharacters(formatArray);
-			return;
+
+			return () => {
+				console.log();
+			};
 		}
 	}, [text]);
 
@@ -66,9 +70,11 @@ function HomeScreen({ navigation }) {
 		const selectCharacter = characters?.filter(
 			(value) => value.name === item.title
 		);
+		/* const value = selectCharacter && selectCharacter[0].image;
+		console.log(value); */
 		return (
 			<>
-				{selectCharacter && (
+				{selectCharacter && selectCharacter.length > 0 && (
 					<TouchableOpacity
 						onPress={() =>
 							navigation.navigate("Detail", {
@@ -78,8 +84,15 @@ function HomeScreen({ navigation }) {
 					>
 						<Card.Title
 							title={item.title}
-							subtitle="Card Subtitle"
-							left={(props) => <Avatar.Icon {...props} icon="folder" />}
+							subtitle={selectCharacter[0].species}
+							left={(props) => (
+								<Avatar.Image
+									size={50}
+									source={{
+										uri: selectCharacter[0].image,
+									}}
+								/>
+							)}
 							right={(props) => <IconButton {...props} icon="information" />}
 						/>
 					</TouchableOpacity>
@@ -90,18 +103,6 @@ function HomeScreen({ navigation }) {
 
 	return (
 		<View>
-			{/* <TextInput
-				style={styles.input}
-				onChangeText={onChangeText}
-				placeholder="Search"
-				value={text}
-
-			/> */}
-			{/* <TextInput
-				placeholder="Search"
-				onChangeText={onChangeText}
-				style={styles.input}
-			/> */}
 			<Searchbar
 				placeholder="Search"
 				onChangeText={onChangeText}

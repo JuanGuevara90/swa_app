@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { CharacterDetail } from "../../models/CharacterDetail";
 import { Card, Avatar, IconButton, Title, Paragraph } from "react-native-paper";
 
@@ -19,19 +19,33 @@ const DetailScreen = ({ route }) => {
 		<View>
 			{characterDetail && (
 				<Card>
-					<Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+					<Card.Cover source={{ uri: characterDetail.image }} />
+
 					<Card.Content>
 						<Title>Name</Title>
 						<Paragraph>{characterDetail.name}</Paragraph>
-						<Title>Hair color</Title>
-						<Paragraph>{characterDetail.hair_color}</Paragraph>
-						<Title>Height</Title>
-						<Paragraph>{characterDetail.height}</Paragraph>
+						<Title>Gender</Title>
+						<Paragraph>{characterDetail.gender}</Paragraph>
+						<Title>Status</Title>
+						<Paragraph>{characterDetail.status}</Paragraph>
 					</Card.Content>
 				</Card>
 			)}
 		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	avatar: {
+		height: 40,
+		margin: 12,
+		borderWidth: 2,
+		padding: 10,
+		borderRadius: 5,
+	},
+	title: {
+		fontSize: 40,
+	},
+});
 
 export default DetailScreen;

@@ -1,31 +1,36 @@
-/* export interface Character {
-    count:    number;
-    next:     string;
-    previous: null;
-    results:  Result[];
-}
- */
 export default interface Character {
-    name:       string;
-    height:     string;
-    mass:       string;
-    hair_color: string;
-    skin_color: string;
-    eye_color:  string;
-    birth_year: string;
-    gender:     Gender;
-    homeworld:  string;
-    films:      string[];
-    species:    string[];
-    vehicles:   string[];
-    starships:  string[];
-    created:    string;
-    edited:     string;
-    url:        string;
+    id:       number;
+    name:     string;
+    status:   Status;
+    species:  Species;
+    type:     string;
+    gender:   Gender;
+    origin:   Location;
+    location: Location;
+    image:    string;
+    episode:  string[];
+    url:      string;
+    created:  string;
 }
 
 export enum Gender {
-    Female = "female",
-    Male = "male",
-    NA = "n/a",
+    Female = "Female",
+    Male = "Male",
+    Unknown = "unknown",
+}
+
+export interface Location {
+    name: string;
+    url:  string;
+}
+
+export enum Species {
+    Alien = "Alien",
+    Human = "Human",
+}
+
+export enum Status {
+    Alive = "Alive",
+    Dead = "Dead",
+    Unknown = "unknown",
 }
