@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { CharacterDetail } from "../../models/CharacterDetail";
 import { Card, Avatar, IconButton, Title, Paragraph } from "react-native-paper";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../RootStackPrams";
+import { getCharacterDetail } from "../../utilities/getCharacters";
 
-const DetailScreen = ({ route }) => {
+type Props = NativeStackScreenProps<RootStackParamList, "Home", "Detail">;
+const DetailScreen = ({ route }: Props) => {
 	const [characterDetail, setcharacterDetail] = useState<CharacterDetail>();
-
 	useEffect(() => {
 		const getCharacters = async () => {
 			let response = await fetch(route.params.url);
@@ -20,14 +23,13 @@ const DetailScreen = ({ route }) => {
 			{characterDetail && (
 				<Card>
 					<Card.Cover source={{ uri: characterDetail.image }} />
-
 					<Card.Content>
 						<Title>Name</Title>
 						<Paragraph>{characterDetail.name}</Paragraph>
 						<Title>Gender</Title>
 						<Paragraph>{characterDetail.gender}</Paragraph>
-						<Title>Status</Title>
-						<Paragraph>{characterDetail.status}</Paragraph>
+						<Title>Mass</Title>
+						<Paragraph>{characterDetail.mass}</Paragraph>
 					</Card.Content>
 				</Card>
 			)}

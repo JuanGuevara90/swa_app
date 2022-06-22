@@ -1,137 +1,122 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Character from "../../models/Character";
 import { getCharacters } from "../../utilities/getCharacters";
+import { NativeStackScreenProps } from "@react-navigation/stack";
 import {
-	View,
 	Text,
 	FlatList,
-	StyleSheet,
 	TouchableOpacity,
+	ActivityIndicator,
+	ListRenderItemInfo,
 } from "react-native";
-import { Avatar, Card, IconButton, Searchbar } from "react-native-paper";
+import {
+	Avatar,
+	Card,
+	IconButton,
+	Searchbar,
+	TextInput,
+} from "react-native-paper";
+import { pipeCharacters } from "./util";
 
-interface ObjectFlatList {
-	id: string;
-	title: string;
+import styles from "./HomeScreen.style";
+import { RootStackParamList } from "../RootStackPrams";
+import {} from "@react-navigation/native-stack";
+
+interface Pagination {
+	current: number;
+	totalPages: number;
 }
 
-function HomeScreen({ navigation }) {
-	const [text, onChangeText] = React.useState("");
-	const [characters, setCharacters] = React.useState<
-		Character[] | Promise<Character[]>
-	>();
-	const [searchCharacters, setSearchCharacters] =
-		React.useState<ObjectFlatList[]>();
+type Props = NativeStackScreenProps<RootStackParamList, "Home", "Detail">;
+
+function HomeScreen({ navigation }: Props) {
+	const [text, onChangeText] = useState("");
+	const [characters, setCharacters] = useState<Character[]>([]);
+	const [page, setPage] = useState<Pagination>({
+		current: 1,
+		totalPages: 0,
+	});
+
+	const { current, totalPages } = page;
 
 	useEffect(() => {
-		let arrayCharacters = getCharacters("/character");
-		console.log(arrayCharacters);
-		if (arrayCharacters) {
-			setCharacters(arrayCharacters);
-		}
-
-		let formatArray = arrayCharacters.map(
-			(character: Character, item: number) => {
-				return { id: item, title: character.name };
-			}
-		);
-		setSearchCharacters(formatArray);
-	}, []);
-
-	useEffect(() => {
-		if (characters && characters?.length > 1) {
-			let newArrayCharacters = [];
-			if (text != "") {
-				newArrayCharacters = characters
-					.filter((character) => character.name.includes(text))
-					.map((value, item) => {
-						return { id: String(item), title: value.name };
-					});
-				if (newArrayCharacters.length === 0) {
-					setSearchCharacters([]);
+		getCharacters(current)
+			.then(
+				({
+					data: {
+						results,
+						info: { pages },
+					},
+				}) => {
+					const isFirstPage = current === 1;
+					setCharacters((prevCharacters) =>
+						isFirstPage ? results : [...prevCharacters, ...results]
+					);
+					isFirstPage &&
+						setPage((prevState) => ({ ...prevState, totalPages: pages }));
 				}
-				setSearchCharacters(newArrayCharacters);
-			} else {
-				let formatArray = characters.map(
-					(character: Character, item: number) => {
-						return { id: String(item), title: character.name };
-					}
-				);
-				setSearchCharacters(formatArray);
-			}
+			)
+			.catch();
+	}, [current]);
 
-			return () => {
-				console.log();
-			};
-		}
-	}, [text]);
-
-	const renderItem = ({ item }) => {
-		const selectCharacter = characters?.filter(
-			(value) => value.name === item.title
-		);
-		/* const value = selectCharacter && selectCharacter[0].image;
-		console.log(value); */
+	const renderItem = ({
+		item: { name, url, species, image },
+	}: ListRenderItemInfo<Character>) => {
 		return (
 			<>
-				{selectCharacter && selectCharacter.length > 0 && (
-					<TouchableOpacity
-						onPress={() =>
-							navigation.navigate("Detail", {
-								url: selectCharacter[0].url,
-							})
-						}
-					>
-						<Card.Title
-							title={item.title}
-							subtitle={selectCharacter[0].species}
-							left={(props) => (
-								<Avatar.Image
-									size={50}
-									source={{
-										uri: selectCharacter[0].image,
-									}}
-								/>
-							)}
-							right={(props) => <IconButton {...props} icon="information" />}
-						/>
-					</TouchableOpacity>
-				)}
+				<TouchableOpacity
+					onPress={() =>
+						navigation.navigate("Detail", {
+							url,
+						})
+					}
+				>
+					<Card.Title
+						title={name}
+						subtitle={species}
+						left={(props) => (
+							<Avatar.Image
+								size={50}
+								source={{
+									uri: image,
+								}}
+							/>
+						)}
+						right={(props) => <IconButton {...props} icon="information" />}
+					/>
+				</TouchableOpacity>
 			</>
 		);
 	};
 
+	const handleFetchData = () => {
+		if (characters.length > 0 && current < totalPages) {
+			setPage((prevState) => ({
+				...prevState,
+				current: prevState.current + 1,
+			}));
+		}
+	};
+
 	return (
-		<View>
+		<>
 			<Searchbar
 				placeholder="Search"
 				onChangeText={onChangeText}
 				value={text}
 				style={styles.input}
 			/>
-			{searchCharacters?.length === 0 && <Text>No hay resultados</Text>}
-			{searchCharacters && (
-				<FlatList
-					data={searchCharacters}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-					extraData="1"
-				/>
-			)}
-		</View>
+			<ActivityIndicator size="large" />
+			<FlatList<Character>
+				ListEmptyComponent={() => <Text>No hay resultados</Text>}
+				data={pipeCharacters(characters, text)}
+				renderItem={renderItem}
+				keyExtractor={(item) => `${page.current}_${String(item.id)}`}
+				onEndReachedThreshold={0.1}
+				onEndReached={handleFetchData}
+			/>
+		</>
 	);
 }
-const styles = StyleSheet.create({
-	input: {
-		height: 40,
-		margin: 12,
-		borderWidth: 2,
-		padding: 10,
-		borderRadius: 5,
-	},
-	title: {
-		fontSize: 40,
-	},
-});
 
 export default HomeScreen;

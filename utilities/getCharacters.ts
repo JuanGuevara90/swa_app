@@ -1,8 +1,21 @@
+import { useState } from 'react';
 import { API } from "@env";
 import Character from "../models/Character";
-export const getCharacters =async (parm:string)=>{
-    let response = await fetch(API+parm);
-    let values = await response.json();
-    let resul = await values.results;
-    return resul;
-}
+import axios from 'axios';
+import { CharacterDetail } from '../models/CharacterDetail';
+
+/* export const getCharacters = () => {
+
+    const [result,setResult] = useState<Character[]>()
+    const consume = async()=>{
+        let response = await fetch(`${API}/character`);
+        let values = await response.json();
+        let resul = await values.results;
+        setResult(resul)
+    }
+    consume();
+    return result;
+} */
+
+export const getCharacters = (page?:number) => axios.get<{ results: Character[],info:{pages:number} }>(`${API}/character?page=${page}`);
+export const getCharacterDetail = (query:string) => axios.get<{ results: CharacterDetail}>(query);
