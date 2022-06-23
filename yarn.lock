@@ -1784,16 +1784,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "18.0.13"
-  resolved "https://registry.npmjs.org/@types/react/-/react-18.0.13.tgz"
-  integrity sha512-psqptIYQxGUFuGYwP3KCFVtPTkMpIcrqFmtKblWEUQhLuYLpHBwJkXhjp6eHfDM5IbyskY4x7qQpLedEsPkHlA==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@~17.0.21":
+"@types/react@*", "@types/react@~17.0.21":
   version "17.0.46"
   resolved "https://registry.npmjs.org/@types/react/-/react-17.0.46.tgz"
   integrity sha512-zNAJVEO9dBEQLPa/OuedGfx92/UlD+1rNxSv2qVWUQZ+orEtLUWFgZ08xfyI9TAZLnmWzZDtssAsgtbXT7Ew0g==

@@ -18,4 +18,4 @@ import { CharacterDetail } from '../models/CharacterDetail';
 } */
 
 export const getCharacters = (page?:number) => axios.get<{ results: Character[],info:{pages:number} }>(`${API}/character?page=${page}`);
-export const getCharacterDetail = (query:string) => axios.get<{ results: CharacterDetail}>(query);
+export const getCharacterDetail = (query:string) => axios.get<CharacterDetail>(query);

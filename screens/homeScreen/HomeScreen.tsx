@@ -9,25 +9,23 @@ import {
 	ActivityIndicator,
 	ListRenderItemInfo,
 } from "react-native";
-import {
-	Avatar,
-	Card,
-	IconButton,
-	Searchbar,
-	TextInput,
-} from "react-native-paper";
+import { Avatar, Card, IconButton, Searchbar } from "react-native-paper";
 import { pipeCharacters } from "./util";
 
 import styles from "./HomeScreen.style";
 import { RootStackParamList } from "../RootStackPrams";
-import {} from "@react-navigation/native-stack";
 
 interface Pagination {
 	current: number;
 	totalPages: number;
 }
 
-type Props = NativeStackScreenProps<RootStackParamList, "Home", "Detail">;
+type Props = NativeStackScreenProps<
+	RootStackParamList,
+	"Home",
+	"Detail",
+	"Create_Character"
+>;
 
 function HomeScreen({ navigation }: Props) {
 	const [text, onChangeText] = useState("");
@@ -106,7 +104,7 @@ function HomeScreen({ navigation }: Props) {
 				value={text}
 				style={styles.input}
 			/>
-			<ActivityIndicator size="large" />
+			{/* <ActivityIndicator size="large" /> */}
 			<FlatList<Character>
 				ListEmptyComponent={() => <Text>No hay resultados</Text>}
 				data={pipeCharacters(characters, text)}

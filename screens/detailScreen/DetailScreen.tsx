@@ -28,8 +28,8 @@ const DetailScreen = ({ route }: Props) => {
 						<Paragraph>{characterDetail.name}</Paragraph>
 						<Title>Gender</Title>
 						<Paragraph>{characterDetail.gender}</Paragraph>
-						<Title>Mass</Title>
-						<Paragraph>{characterDetail.mass}</Paragraph>
+						<Title>Specie</Title>
+						<Paragraph>{characterDetail.species}</Paragraph>
 					</Card.Content>
 				</Card>
 			)}
