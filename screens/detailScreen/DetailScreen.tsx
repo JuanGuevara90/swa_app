@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { CharacterDetail } from "../../models/CharacterDetail";
 import { Card, Avatar, IconButton, Title, Paragraph } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../RootStackPrams";
+import { RootStackParamList } from "../RootStackParamList";
 import { getCharacterDetail } from "../../utilities/getCharacters";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home", "Detail">;

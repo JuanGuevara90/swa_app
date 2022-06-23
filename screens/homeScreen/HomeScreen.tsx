@@ -13,7 +13,7 @@ import { Avatar, Card, IconButton, Searchbar } from "react-native-paper";
 import { pipeCharacters } from "./util";
 
 import styles from "./HomeScreen.style";
-import { RootStackParamList } from "../RootStackPrams";
+import { RootStackParamList } from "../RootStackParamList";
 
 interface Pagination {
 	current: number;
