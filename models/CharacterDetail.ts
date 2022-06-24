@@ -1,16 +1,17 @@
 export interface CharacterDetail {
-    id:       number;
+    id?:       number;
     name:     string;
-    status:   string;
+    status?:   string;
     species:  string;
-    type:     string;
-    gender:   string;
-    origin:   Location;
-    location: Location;
+    type?:     string;
+    gender?:   string;
+    origin?:   Location;
+    location?: Location;
     image:    string;
-    episode:  string[];
-    url:      string;
-    created:  string;
+    episode?:  string[];
+    url?:      string;
+    created?:  string;
+    description: string;
 }
 
 export interface Location {

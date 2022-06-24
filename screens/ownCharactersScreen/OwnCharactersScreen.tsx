@@ -6,18 +6,17 @@ import {
 	ListRenderItemInfo,
 	Image,
 } from "react-native";
+
 import { NativeStackScreenProps } from "@react-navigation/stack";
 import { Searchbar, Card, Avatar, IconButton } from "react-native-paper";
-import OwnCharacter from "../../models/OwnCharacter";
-import styles from "./OwnCharactersScreen.style";
 import { RootStackParamList } from "../RootStackParamList";
 import { OPTIONS } from "../../utilities/characterOptions";
-import { AsyncStorage } from "react-native";
+import { pipeCharacters } from "../../utilities/pipeCharacters";
 
-import {
-	pipeCharacters,
-	pipeOwnCharacters,
-} from "../../utilities/pipeCharacters";
+import { getData, storeData } from "../../store/store.data";
+import { CharacterDetail } from "../../models/CharacterDetail";
+import styles from "./OwnCharactersScreen.style";
+import Character from "../../models/Character";
 
 type Props = NativeStackScreenProps<
 	RootStackParamList,
@@ -30,13 +29,20 @@ type Props = NativeStackScreenProps<
 
 const OwnCharactersScreen = ({ navigation, route }: Props) => {
 	const [text, onChangeText] = useState("");
-	/* let dataStrore = await AsyncStorage.getItem("ownCharacters");
-	console.log(dataStrore); */
-	/* let valueStore = [];
-	if (dataStrore != null) {
-		valueStore = JSON.parse(dataStrore);
-	} */
-	const [ownCharacters, setOwnCharacteres] = useState<OwnCharacter[]>([]);
+	let data: Array<Character> = [];
+
+	const [ownCharacters, setOwnCharacteres] = useState<Character[]>(data);
+
+	useEffect(() => {
+		getData()
+			.then((resul) => {
+				setOwnCharacteres(resul);
+			})
+			.catch((e) => []);
+	}, []);
+	useEffect(() => {
+		storeData(ownCharacters);
+	}, [ownCharacters]);
 
 	useEffect(() => {
 		if (route.params) {
@@ -48,6 +54,8 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 					{
 						name: data.name,
 						species: data.species,
+						description: data.description,
+						image: data.image,
 					},
 				]);
 			} else {
@@ -62,12 +70,11 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 					setOwnCharacteres([...editCharacterArray]);
 				}
 			}
-			/* AsyncStorage.setItem("ownCharacters", JSON.stringify(ownCharacters)); */
 		}
 	}, [route.params]);
 	const renderItem = ({
 		item: { name, species, image },
-	}: ListRenderItemInfo<OwnCharacter>) => {
+	}: ListRenderItemInfo<Character>) => {
 		return (
 			<>
 				<TouchableOpacity
@@ -114,7 +121,9 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 		const arrayDeleteCharacter = ownCharacters.filter(
 			(item) => item.name != op
 		);
+
 		setOwnCharacteres([...arrayDeleteCharacter]);
+		storeData([...arrayDeleteCharacter]);
 	};
 	return (
 		<>
@@ -126,9 +135,9 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 			/>
 			{/* <ActivityIndicator size="large" /> */}
 
-			<FlatList<OwnCharacter>
+			<FlatList<Character>
 				ListEmptyComponent={() => <Text>No hay resultados</Text>}
-				data={pipeOwnCharacters(ownCharacters, text)}
+				data={pipeCharacters(ownCharacters, text)}
 				renderItem={renderItem}
 				keyExtractor={(item) => `own_${String(item.name)}`}
 			/>

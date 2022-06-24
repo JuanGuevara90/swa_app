@@ -14,7 +14,7 @@ type Props = NativeStackScreenProps<
 >;
 export default function CreateCharacterScreen({ navigation, route }: Props) {
 	const { oldCharacter, option } = route.params;
-	const { name, species } = oldCharacter;
+	const { name, species, image, description } = oldCharacter;
 
 	const {
 		control,
@@ -24,6 +24,8 @@ export default function CreateCharacterScreen({ navigation, route }: Props) {
 		defaultValues: {
 			name,
 			species,
+			image,
+			description,
 		},
 	});
 	const onSubmit = (data) =>
@@ -69,6 +71,40 @@ export default function CreateCharacterScreen({ navigation, route }: Props) {
 				name="species"
 			/>
 			{errors.species && <Text>This is required.</Text>}
+			<Text style={styles.label}>Image</Text>
+			<Controller
+				control={control}
+				rules={{
+					maxLength: 100,
+				}}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<TextInput
+						style={styles.input}
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
+					/>
+				)}
+				name="image"
+			/>
+			{errors.image && <Text>This is required.</Text>}
+			<Text style={styles.label}>Description</Text>
+			<Controller
+				control={control}
+				rules={{
+					maxLength: 100,
+				}}
+				render={({ field: { onChange, onBlur, value } }) => (
+					<TextInput
+						style={styles.input}
+						onBlur={onBlur}
+						onChangeText={onChange}
+						value={value}
+					/>
+				)}
+				name="description"
+			/>
+			{errors.description && <Text>This is required.</Text>}
 			<Button title="Save" onPress={handleSubmit(onSubmit)} />
 		</View>
 	);
