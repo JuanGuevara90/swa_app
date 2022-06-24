@@ -8,8 +8,16 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 export const MyTabs = () => {
 	return (
 		<Tab.Navigator>
-			<Tab.Screen name="Home" component={HomeScreen} />
-			<Tab.Screen name="My_Characters" component={OwnCharactersScreen} />
+			<Tab.Screen
+				name="Home"
+				component={HomeScreen}
+				options={{ title: "Series Characters" }}
+			/>
+			<Tab.Screen
+				name="My_Characters"
+				component={OwnCharactersScreen}
+				options={{ title: "Own Characters" }}
+			/>
 		</Tab.Navigator>
 	);
 };

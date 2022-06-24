@@ -10,7 +10,7 @@ import {
 	ListRenderItemInfo,
 } from "react-native";
 import { Avatar, Card, IconButton, Searchbar } from "react-native-paper";
-import { pipeCharacters } from "./util";
+import { pipeCharacters } from "../../utilities/pipeCharacters";
 
 import styles from "./HomeScreen.style";
 import { RootStackParamList } from "../RootStackParamList";
@@ -80,7 +80,7 @@ function HomeScreen({ navigation }: Props) {
 								}}
 							/>
 						)}
-						right={(props) => <IconButton {...props} icon="information" />}
+						right={(props) => <IconButton {...props} icon="arrow-right" />}
 					/>
 				</TouchableOpacity>
 			</>

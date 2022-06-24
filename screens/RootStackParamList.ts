@@ -4,4 +4,6 @@ export type RootStackParamList = {
     Create_Character:undefined;
     My_Characters: undefined;
     MyTabs:undefined;
+    Edit_Character: undefined;
+    DetailOWnCharacter: undefined;
     };

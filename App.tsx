@@ -9,6 +9,8 @@ import DetailsScreen from "./screens/detailScreen";
 
 import { MyTabs } from "./components/tabs/MyTabs";
 import { RootStackParamList } from "./screens/RootStackParamList";
+import CreateCharacterScreen from "./screens/ownCharactersScreen/createCharacterScreen/CreateCharacterScreen";
+import DetailCharacterScreen from "./screens/ownCharactersScreen/detailCharacterScreen/DetailCharacterScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,6 +19,12 @@ export default function App() {
 		<>
 			<NavigationContainer>
 				<Stack.Navigator>
+					<Stack.Screen
+						name="MyTabs"
+						component={MyTabs}
+						/* options={{ title: "APP" }} */
+						options={{ headerShown: false }}
+					/>
 					<Stack.Screen
 						name="Home"
 						component={HomeScreen}
@@ -36,15 +44,21 @@ export default function App() {
 						options={{ title: "Detail Character" }}
 					/>
 					<Stack.Screen
+						name="DetailOWnCharacter"
+						component={DetailCharacterScreen}
+						options={{ title: "Detail Character" }}
+					/>
+					<Stack.Screen
 						name="Create_Character"
-						component={DetailsScreen}
+						component={CreateCharacterScreen}
 						options={{ title: "Create Character" }}
 					/>
 					<Stack.Screen
-						name="MyTabs"
-						component={MyTabs}
-						options={{ title: "Create Character" }}
+						name="Edit_Character"
+						component={CreateCharacterScreen}
+						options={{ title: "Edit Character" }}
 					/>
+
 					{/* <MyTabs /> */}
 				</Stack.Navigator>
 			</NavigationContainer>
