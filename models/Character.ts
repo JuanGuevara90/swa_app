@@ -1,13 +1,13 @@
 export default interface Character {
     id?:       number;
-    name:     string;
+    name?:     string;
     status?:   Status;
-    species:  Species;
+    species?:  string;
     type?:     string;
     gender?:   Gender;
     origin?:   Location;
     location?: Location;
-    image:    string;
+    image?:    string;
     episode?:  string[];
     url?:      string;
     created?:  string;

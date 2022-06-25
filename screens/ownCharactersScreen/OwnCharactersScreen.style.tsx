@@ -26,6 +26,10 @@ const styles = StyleSheet.create({
 		height: 50,
 		//backgroundColor:'black'
 	},
+	label: {
+		marginLeft: 40,
+		marginTop: 10,
+	},
 });
 
 export default styles;

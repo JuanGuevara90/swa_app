@@ -1,35 +1,67 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { CharacterDetail } from "../../models/CharacterDetail";
-import { Card, Avatar, IconButton, Title, Paragraph } from "react-native-paper";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { View, StyleSheet, Button, Text } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/stack";
+import { Card, Title, Paragraph } from "react-native-paper";
 import { RootStackParamList } from "../RootStackParamList";
 import { getCharacterDetail } from "../../utilities/getCharacters";
+import Character from "../../models/Character";
+import { DetailCharacterLoader } from "../../components/loader/Loader";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Home", "Detail">;
-const DetailScreen = ({ route }: Props) => {
-	const [characterDetail, setcharacterDetail] = useState<CharacterDetail>();
+type Props = NativeStackScreenProps<
+	RootStackParamList,
+	"Home",
+	"Detail",
+	"My_Characters",
+	"Create_Character",
+	"Edit_Character",
+	"DetailOWnCharacter"
+>;
+
+const DetailScreen = ({ navigation, route }: Props) => {
+	const [characterDetail, setcharacterDetail] = useState<Character>();
+	const { url, oldCharacter, option } = route.params;
+
 	useEffect(() => {
-		const getCharacters = async () => {
-			let response = await fetch(route.params.url);
-			let values = await response.json();
-			setcharacterDetail(values);
-		};
-		getCharacters();
+		if (option === "SHOW") {
+			getCharacterDetail(url)
+				.then(({ data: { name, species, description, image, status } }) => {
+					setcharacterDetail({ name, description, image, species, status });
+				})
+				.catch();
+		} else {
+			setcharacterDetail(oldCharacter);
+		}
 	}, []);
+
+	const clickHandler = () => {
+		navigation.navigate("Create_Character", {
+			oldCharacter,
+			option,
+		});
+	};
 
 	return (
 		<View>
+			{!characterDetail && <DetailCharacterLoader />}
 			{characterDetail && (
 				<Card>
 					<Card.Cover source={{ uri: characterDetail.image }} />
 					<Card.Content>
 						<Title>Name</Title>
 						<Paragraph>{characterDetail.name}</Paragraph>
-						<Title>Gender</Title>
-						<Paragraph>{characterDetail.gender}</Paragraph>
 						<Title>Specie</Title>
 						<Paragraph>{characterDetail.species}</Paragraph>
+						<Title>Status</Title>
+						<Paragraph>
+							{characterDetail.status ? <Text>Alive</Text> : <Text>Dead</Text>}
+						</Paragraph>
+						{option === "EDIT" && (
+							<>
+								<Title>Description</Title>
+								<Paragraph>{characterDetail.species}</Paragraph>
+								<Button onPress={clickHandler} title="Edit Character" />
+							</>
+						)}
 					</Card.Content>
 				</Card>
 			)}

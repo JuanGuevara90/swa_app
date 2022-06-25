@@ -13,8 +13,7 @@ import { RootStackParamList } from "../RootStackParamList";
 import { OPTIONS } from "../../utilities/characterOptions";
 import { pipeCharacters } from "../../utilities/pipeCharacters";
 
-import { getData, storeData } from "../../store/store.data";
-import { CharacterDetail } from "../../models/CharacterDetail";
+import { getData, storeData } from "../../store/storeData";
 import styles from "./OwnCharactersScreen.style";
 import Character from "../../models/Character";
 
@@ -47,7 +46,6 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 	useEffect(() => {
 		if (route.params) {
 			const { data, option, oldCharacter } = route.params;
-
 			if (option === "CREATE") {
 				setOwnCharacteres((prev) => [
 					...prev,
@@ -55,6 +53,7 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 						name: data.name,
 						species: data.species,
 						description: data.description,
+						status: data.status,
 						image: data.image,
 					},
 				]);
@@ -62,8 +61,7 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 				if (option === "EDIT") {
 					let editCharacterArray = ownCharacters.map((item) => {
 						if (item.name === oldCharacter.name) {
-							console.log("igual");
-							return { ...data };
+							return data;
 						}
 						return item;
 					});
@@ -73,14 +71,14 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 		}
 	}, [route.params]);
 	const renderItem = ({
-		item: { name, species, image },
+		item: { name, species, image, description, status },
 	}: ListRenderItemInfo<Character>) => {
 		return (
 			<>
 				<TouchableOpacity
 					onPress={() =>
 						navigation.navigate("Detail", {
-							oldCharacter: { name, species, image },
+							oldCharacter: { name, species, image, description, status },
 							option: OPTIONS.EDIT,
 						})
 					}
@@ -112,7 +110,13 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 		// Enviar a la pagina de detalle
 		if (op === "") {
 			navigation.navigate("Create_Character", {
-				oldCharacter: { name: "", species: "", image: "" },
+				oldCharacter: {
+					name: "",
+					species: "",
+					image: "",
+					description: "",
+					status: true,
+				},
 				option: OPTIONS.CREATE,
 			});
 			return;
@@ -136,7 +140,9 @@ const OwnCharactersScreen = ({ navigation, route }: Props) => {
 			{/* <ActivityIndicator size="large" /> */}
 
 			<FlatList<Character>
-				ListEmptyComponent={() => <Text>No hay resultados</Text>}
+				ListEmptyComponent={() => (
+					<Text style={styles.label}>No hay resultados</Text>
+				)}
 				data={pipeCharacters(ownCharacters, text)}
 				renderItem={renderItem}
 				keyExtractor={(item) => `own_${String(item.name)}`}

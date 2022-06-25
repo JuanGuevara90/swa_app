@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import Character from "../../models/Character";
-import { getCharacters } from "../../utilities/getCharacters";
-import { NativeStackScreenProps } from "@react-navigation/stack";
 import {
 	Text,
 	FlatList,
 	TouchableOpacity,
-	ActivityIndicator,
 	ListRenderItemInfo,
 } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/stack";
 import { Avatar, Card, IconButton, Searchbar } from "react-native-paper";
+
+import Character from "../../models/Character";
+import { getCharacters } from "../../utilities/getCharacters";
+import { RootStackParamList } from "../RootStackParamList";
+import { OPTIONS } from "../../utilities/characterOptions";
 import { pipeCharacters } from "../../utilities/pipeCharacters";
 
 import styles from "./HomeScreen.style";
-import { RootStackParamList } from "../RootStackParamList";
+import { CharacterLoader } from "../../components/loader/Loader";
 
 interface Pagination {
 	current: number;
@@ -66,6 +68,7 @@ function HomeScreen({ navigation }: Props) {
 					onPress={() =>
 						navigation.navigate("Detail", {
 							url,
+							option: OPTIONS.SHOW,
 						})
 					}
 				>
@@ -104,7 +107,7 @@ function HomeScreen({ navigation }: Props) {
 				value={text}
 				style={styles.input}
 			/>
-			{/* <ActivityIndicator size="large" /> */}
+			{characters.length === 0 && <CharacterLoader />}
 			<FlatList<Character>
 				ListEmptyComponent={() => <Text>No hay resultados</Text>}
 				data={pipeCharacters(characters, text)}
