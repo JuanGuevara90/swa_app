@@ -9,7 +9,6 @@ import { RootStackParamList } from "../../utilities/RootStackParamList";
 import { ACTION } from "../../utilities/characterActions";
 import { pipeCharacters } from "../../utilities/pipeCharacters";
 
-
 import { CharacterLoader } from "../../components/loader/Loader";
 import Item from "../../components/commons/item";
 import styles from "./Character.style";
@@ -24,8 +23,7 @@ type Props = NativeStackScreenProps<
 	"APICharacter",
 	"Detail",
 	"OwnCharacter",
-	"Create_Character",
-	"DetailOWnCharacter"
+	"Create_Character"
 >;
 
 function Character({ navigation }: Props) {

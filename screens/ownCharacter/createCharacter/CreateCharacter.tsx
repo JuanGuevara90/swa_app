@@ -12,8 +12,7 @@ type Props = NativeStackScreenProps<
 	"APICharacter",
 	"Detail",
 	"OwnCharacter",
-	"Create_Character",
-	"DetailOWnCharacter"
+	"Create_Character"
 >;
 
 export default function CreateCharacter({ navigation, route }: Props) {

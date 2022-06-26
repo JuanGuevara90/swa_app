@@ -22,8 +22,7 @@ type Props = NativeStackScreenProps<
 	"APICharacter",
 	"Detail",
 	"OwnCharacter",
-	"Create_Character",
-	"DetailOWnCharacter"
+	"Create_Character"
 >;
 
 const OwnCharactersScreen = ({ navigation, route }: Props) => {
