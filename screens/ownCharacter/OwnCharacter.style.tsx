@@ -8,9 +8,6 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderRadius: 5,
 	},
-	title: {
-		fontSize: 40,
-	},
 	touchableOpacityStyle: {
 		position: "absolute",
 		width: 50,

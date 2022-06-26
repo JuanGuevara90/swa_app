@@ -1,7 +1,7 @@
-export default interface Character {
+export default interface CharacterModel {
     id?:       number;
     name?:     string;
-    status?:   Status;
+    status?:   boolean;
     species?:  string;
     type?:     string;
     gender?:   Gender;

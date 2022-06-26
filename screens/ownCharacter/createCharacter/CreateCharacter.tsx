@@ -3,24 +3,23 @@ import { Text, View, TextInput, Button, ScrollView } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/stack";
 import { useForm, Controller } from "react-hook-form";
 import { Switch } from "react-native-paper";
-import { RootStackParamList } from "../../RootStackParamList";
-import styles from "./CreateCharacterScreen.style";
-import Character from "../../../models/Character";
+import { RootStackParamList } from "../../../utilities/RootStackParamList";
+import CharacterModel from "../../../models/Character";
+import styles from "./CreateCharacter.style";
 
 type Props = NativeStackScreenProps<
 	RootStackParamList,
-	"Home",
+	"APICharacter",
 	"Detail",
-	"My_Characters",
+	"OwnCharacter",
 	"Create_Character",
-	"Edit_Character",
 	"DetailOWnCharacter"
 >;
 
-export default function CreateCharacterScreen({ navigation, route }: Props) {
-	const { oldCharacter, option } = route.params;
+export default function CreateCharacter({ navigation, route }: Props) {
+	const { oldCharacter, action } = route.params;
 	const { name, species, image, description, status } = oldCharacter;
-	const [isSwitchOn, setIsSwitchOn] = useState(status);
+	const [isSwitchOn, setIsSwitchOn] = useState<boolean>(status);
 	const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
 	const {
@@ -36,11 +35,11 @@ export default function CreateCharacterScreen({ navigation, route }: Props) {
 			status: isSwitchOn,
 		},
 	});
-	const onSubmit = (data: Character) =>
-		navigation.navigate("My_Characters", {
-			data,
+	const onSubmit = (newCharacter: CharacterModel) =>
+		navigation.navigate("OwnCharacter", {
+			newCharacter,
 			oldCharacter,
-			option,
+			action,
 		});
 
 	return (

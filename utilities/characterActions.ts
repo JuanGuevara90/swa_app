@@ -1,4 +1,4 @@
-export const OPTIONS = Object.freeze( {
+export const ACTION = Object.freeze( {
     CREATE: "CREATE",
     EDIT: "EDIT",
     DELETE:"DELETE",

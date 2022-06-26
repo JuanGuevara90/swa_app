@@ -1,1 +1,0 @@
-import OwnCharactersScreen from "./OwnCharactersScreen";

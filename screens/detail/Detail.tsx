@@ -1,64 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Button, Text } from "react-native";
+import { View, Button, Text } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/stack";
 import { Card, Title, Paragraph } from "react-native-paper";
-import { RootStackParamList } from "../RootStackParamList";
+import { RootStackParamList } from "../../utilities/RootStackParamList";
 import { getCharacterDetail } from "../../utilities/getCharacters";
-import Character from "../../models/Character";
+import CharacterModel from "../../models/Character";
 import { DetailCharacterLoader } from "../../components/loader/Loader";
 
 type Props = NativeStackScreenProps<
 	RootStackParamList,
-	"Home",
+	"APICharacter",
 	"Detail",
-	"My_Characters",
+	"OwnCharacter",
 	"Create_Character",
-	"Edit_Character",
 	"DetailOWnCharacter"
 >;
 
 const DetailScreen = ({ navigation, route }: Props) => {
-	const [characterDetail, setcharacterDetail] = useState<Character>();
-	const { url, oldCharacter, option } = route.params;
+	const [character, setCharacter] = useState<CharacterModel>();
+	const { url, oldCharacter, action } = route.params;
 
 	useEffect(() => {
-		if (option === "SHOW") {
+		if (action === "SHOW") {
 			getCharacterDetail(url)
 				.then(({ data: { name, species, description, image, status } }) => {
-					setcharacterDetail({ name, description, image, species, status });
+					setCharacter({ name, description, image, species, status });
 				})
 				.catch();
 		} else {
-			setcharacterDetail(oldCharacter);
+			setCharacter(oldCharacter);
 		}
 	}, []);
 
 	const clickHandler = () => {
 		navigation.navigate("Create_Character", {
 			oldCharacter,
-			option,
+			action,
+			name: "Edit Character",
 		});
 	};
 
 	return (
 		<View>
-			{!characterDetail && <DetailCharacterLoader />}
-			{characterDetail && (
+			{!character && <DetailCharacterLoader />}
+			{character && (
 				<Card>
-					<Card.Cover source={{ uri: characterDetail.image }} />
+					<Card.Cover source={{ uri: character.image }} />
 					<Card.Content>
 						<Title>Name</Title>
-						<Paragraph>{characterDetail.name}</Paragraph>
+						<Paragraph>{character.name}</Paragraph>
 						<Title>Specie</Title>
-						<Paragraph>{characterDetail.species}</Paragraph>
+						<Paragraph>{character.species}</Paragraph>
 						<Title>Status</Title>
 						<Paragraph>
-							{characterDetail.status ? <Text>Alive</Text> : <Text>Dead</Text>}
+							{character.status ? <Text>Alive</Text> : <Text>Dead</Text>}
 						</Paragraph>
-						{option === "EDIT" && (
+						{action === "EDIT" && (
 							<>
 								<Title>Description</Title>
-								<Paragraph>{characterDetail.species}</Paragraph>
+								<Paragraph>{character.species}</Paragraph>
 								<Button onPress={clickHandler} title="Edit Character" />
 							</>
 						)}
@@ -68,18 +68,5 @@ const DetailScreen = ({ navigation, route }: Props) => {
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	avatar: {
-		height: 40,
-		margin: 12,
-		borderWidth: 2,
-		padding: 10,
-		borderRadius: 5,
-	},
-	title: {
-		fontSize: 40,
-	},
-});
 
 export default DetailScreen;
